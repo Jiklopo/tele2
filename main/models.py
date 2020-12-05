@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth.models import User
-1
+
 
 def percentage_validation(value):
     if not 0 <= value <= 100:
@@ -9,7 +9,7 @@ def percentage_validation(value):
 
 
 def positive_integer(value):
-    if value <= 1:
+    if value < 1:
         raise ValidationError(f'Value must more than 0.')
 
 
