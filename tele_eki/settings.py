@@ -77,7 +77,7 @@ DATABASES = {
         'NAME': 'tele2',
         'USER': 'jiklopo',
         'PASSWORD': 'kartop',
-        'HOST': '0.0.0.0',
+        'HOST': 'localhost',
         'PORT': 5432
     }
 }
