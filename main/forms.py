@@ -11,4 +11,4 @@ class BookableForm(ModelForm):
 class BookingForm(ModelForm):
     class Meta:
         model = Booking
-        fields = ['place', 'start_time', 'end_time']
+        fields = ['start_time', 'end_time']

@@ -67,7 +67,7 @@ class CalendarView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(CalendarView, self).get_context_data(**kwargs)
         try:
-            context['bookings'] = Booking.objects.get(place=self.object)
+            context['bookings'] = Booking.objects.filter(place=self.object)
         except Booking.DoesNotExist:
             context['bookings'] = []
         return context
@@ -77,6 +77,12 @@ class CreateBookingView(CreateView):
     template_name = 'bookings/form.html'
     form_class = BookingForm
     success_url = reverse_lazy('index.html')
+
+    def form_valid(self, form):
+        booking = form.save(commit=False)
+        booking.user = self.request.user
+        booking.save()
+        return HttpResponseRedirect(reverse('calendar', args=[booking.place_id]))
 
 
 class UpdateBookingView(UpdateView):

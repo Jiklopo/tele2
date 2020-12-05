@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block body %}
     {% for bookable in bookables %}
-        <h1>{{ bookable.name }} - <a href="{% url 'booking-create'%}">Book time</a></h1>
+        <h1>{{ bookable.name }} - <a href="{% url 'booking-create' bookable.id%}">Book time</a></h1>
     {% endfor %}
 {% endblock %}
