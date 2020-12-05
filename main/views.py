@@ -1,5 +1,5 @@
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -40,21 +40,24 @@ class UserChangePasswordView(LoginRequiredMixin, PasswordChangeView):
     success_url = reverse_lazy('index')
 
 
-class CreateBookableView(LoginRequiredMixin, CreateView):
+class CreateBookableView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     template_name = 'bookables/form.html'
+    permission_required = 'main.add_bookable'
     form_class = BookableForm
     success_url = reverse_lazy('index')
 
 
-class UpdateBookableView(LoginRequiredMixin, UpdateView):
+class UpdateBookableView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     template_name = 'bookables/form.html'
+    permission_required = 'main.change_bookable'
     form_class = BookableForm
     queryset = Bookable.objects.all()
     success_url = reverse_lazy('index')
 
 
-class DeleteBookableView(LoginRequiredMixin, DeleteView):
+class DeleteBookableView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     template_name = 'bookables/form.html'
+    permission_required = 'main.delete_bookable'
     form_class = BookableForm
     queryset = Bookable.objects.all()
     success_url = reverse_lazy('index')
@@ -89,12 +92,16 @@ class CreateBookingView(LoginRequiredMixin, CreateView):
 class UpdateBookingView(LoginRequiredMixin, UpdateView):
     template_name = 'bookings/form.html'
     form_class = BookingForm
-    queryset = Booking.objects.all()
     success_url = reverse_lazy('index.html')
+
+    def get_queryset(self):
+        return Booking.objects.filter(user=self.request.user)
 
 
 class DeleteBookingView(LoginRequiredMixin, DeleteView):
     template_name = 'bookings/form.html'
     form_class = BookingForm
-    queryset = Booking.objects.all()
     success_url = reverse_lazy('index.html')
+
+    def get_queryset(self):
+        return Booking.objects.filter(user=self.request.user)
