@@ -1,4 +1,5 @@
 import django_heroku
+from os import getenv
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -11,10 +12,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'he$m80c@u^%8ikx@z-=lhf03qcm-!#3r0a)p*=7eqao95kflrv'
+SECRET_KEY = getenv('SECRET_KEY') or 'he$m80c@u^%8ikx@z-=lhf03qcm-!#3r0a)p*=7eqao95kflrv'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = getenv('ENV') != 'HEROKU'
 
 ALLOWED_HOSTS = []
 
@@ -30,9 +31,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'main',
-
-    'schedule'
+    'main'
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
