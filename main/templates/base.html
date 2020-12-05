@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}An Application{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'base.css' %}">
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+<header>
+    <div id="links">
+        <h2><a href="{% url 'index' %}">Kalaysyn</a></h2>
+        <h2><a href="{% url 'calendar' %}">Calendar</a></h2>
+        {% if user.is_authenticated %}
+            <h2><a href="{% url 'day-new' %}">New Day</a></h2>
+            <h2><a href="{% url 'event-new' %}">New Event</a></h2>
+            <h2><i>{{ user.username }}</i><a href="{% url 'logout' %}">Logout</a></h2>
+        {% else %}
+            <h2><a href="{% url 'login' %}">Login</a> or <a href="{% url 'register' %}">Register</a></h2>
+        {% endif %}
+    </div>
+</header>
+
+<main>
+    {% block body %}{% endblock %}
+</main>
+
+<footer>
+    <p>Please do not copy anything. No rights reserved.</p>
+</footer>
+</body>
+</html>
