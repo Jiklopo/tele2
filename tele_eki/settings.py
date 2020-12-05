@@ -33,7 +33,6 @@ INSTALLED_APPS = [
     'django.contrib.sites',
 
     'main',
-    'auth_test',
 
     'allauth',
     'allauth.account',
