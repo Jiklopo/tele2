@@ -15,6 +15,9 @@
 <header>
     <nav class="navbar navbar-white navbar-expand-sm">
         <div class="container">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-targer="#Navbar">
+                <span class="navbar-toggler-icon"><a class="navbar-brand mr-auto" href="{% url 'index' %}"><img src="{% static batya.png %}" width="41" height="30"></a></span>
+            </button>
             <div class="collapse navbar-collapse" id="Navbar">
                 <ul class="navbar-nav mr-auto">
                     {% if user.is_authenticated %}
