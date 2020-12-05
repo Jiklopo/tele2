@@ -81,7 +81,7 @@ class CreateBookingView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         booking = form.save(commit=False)
         booking.user = self.request.user
-        booking.place = get_object_or_404(Bookable, id=self.kwargs['pk'])
+        #booking.place = get_object_or_404(Bookable, id=self.kwargs['pk'])
         booking.save()
         return HttpResponseRedirect(reverse('calendar', args=[booking.place_id]))
 

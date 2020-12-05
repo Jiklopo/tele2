@@ -29,5 +29,7 @@ class Bookable (models.Model):
 class Booking(models.Model):
     place = models.ForeignKey(to=Bookable, on_delete=models.CASCADE)
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    row = models.IntegerField(validators=[positive_integer])
+    column = models.IntegerField(validators=[positive_integer])
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
