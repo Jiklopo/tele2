@@ -60,6 +60,19 @@ class DeleteBookableView(DeleteView):
     success_url = reverse_lazy('index')
 
 
+class CalendarView(DetailView):
+    template_name = 'calendar.html'
+    queryset = Bookable.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super(CalendarView, self).get_context_data(**kwargs)
+        try:
+            context['bookings'] = Booking.objects.get(place=self.object)
+        except Booking.DoesNotExist:
+            context['bookings'] = []
+        return context
+
+
 class CreateBookingView(CreateView):
     template_name = 'bookings/form.html'
     form_class = BookingForm

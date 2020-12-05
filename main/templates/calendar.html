@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block body %}
+    <h1>{{ object.name }}</h1>
+    {% for booking in bookings %}
+        <h1>{{ booking.user.username }}</h1>
+    {% endfor %}
+{% endblock %}

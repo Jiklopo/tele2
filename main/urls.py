@@ -11,6 +11,7 @@ urlpatterns = [
     path('bookables/create', CreateBookableView.as_view(), name='bookable-create'),
     path('bookables/<int:pk>/update', UpdateBookableView.as_view(), name='bookable-update'),
     path('bookables/<int:pk>/delete', DeleteBookableView.as_view(), name='bookable-delete'),
+    path('bookables/<int:pk>/calendar', CalendarView.as_view(), name='calendar'),
 
     path('bookings/create', CreateBookingView.as_view(), name='booking-create'),
     path('bookings/<int:pk>/update', UpdateBookingView.as_view(), name='booking-update'),
