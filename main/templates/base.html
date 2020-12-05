@@ -10,20 +10,19 @@
 
 <body>
 <header>
-    <div id="links">
-        <h2><a href="{% url 'index' %}">Kalaysyn</a></h2>
-        <h2><a href="{% url 'calendar' %}">Calendar</a></h2>
-        {% if user.is_authenticated %}
-            <h2><a href="{% url 'day-new' %}">New Day</a></h2>
-            <h2><a href="{% url 'event-new' %}">New Event</a></h2>
-            <h2><i>{{ user.username }}</i><a href="{% url 'logout' %}">Logout</a></h2>
-        {% else %}
-            <h2><a href="{% url 'login' %}">Login</a> or <a href="{% url 'register' %}">Register</a></h2>
-        {% endif %}
-    </div>
+    {% if user.is_authenticated %}
+        <a href="{% url 'logout' %}">Logout</a>
+    {% else %}
+        <a href="{% url 'login' %}">Logout</a>
+        <a href="{% url 'register' %}">Register</a>
+    {% endif %}
+
+    <a href="{% url 'bookable-create' %}">Create Bookable</a>
+    <a href="{% url 'booking-create' %}">Create Booking</a>
 </header>
 
 <main>
+    <h1>MAIN!!!</h1>
     {% block body %}{% endblock %}
 </main>
 

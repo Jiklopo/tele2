@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block body %}
+    {% for bookable in bookables %}
+        <h1><a href="{% url 'booking-create'%}"></a></h1>
+    {% endfor %}
+{% endblock %}
