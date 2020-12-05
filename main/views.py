@@ -78,9 +78,17 @@ class CreateBookingView(CreateView):
     form_class = BookingForm
     success_url = reverse_lazy('index.html')
 
+    def get_object(self, queryset=None):
+        object = super(CreateBookingView, self).get_object()
+        bookable = Bookable.objects.get(id=self.kwargs['pk'])
+        self.bookable = bookable
+        return object
+
+
     def form_valid(self, form):
         booking = form.save(commit=False)
         booking.user = self.request.user
+        booking.place = self.bookable
         booking.save()
         return HttpResponseRedirect(reverse('calendar', args=[booking.place_id]))
 
