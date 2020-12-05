@@ -16,14 +16,14 @@ class BookingForm(ModelForm):
         c = self.cleaned_data['column']
         st_time = self.cleaned_data['start_time']
         end_time = self.cleaned_data['end_time']
-        intersec = Booking.objects.filter(Q(start_time__gt=end_time) | Q(end_time__lt=st_time))
-        bookings = Booking.objects.filter(row=r, column=c).intersection(intersec)
+        intersection = ~(Q(start_time__gt=end_time) | Q(end_time__lt=st_time))
+        bookings = Booking.objects.filter(intersection, column=c, row=r)
         if bookings:
-            raise ValidationError('Это место уже занято в это время!')
-        bookings = Booking.objects.filter(row__gt=r-dist, row__lt=r+dist,
-                                          column__gt=c-dist, column__lt=c+dist).intersection(intersec)
+            raise ValidationError('Это место занято!')
+
+        bookings = Booking.objects.filter(intersection, row__gte=r-dist, row__lte=r-dist, column__gte=c-dist, column__lte=c+dist)
         if bookings:
-            raise ValidationError(f'Необходимо соблюдать дистанцию в {dist} мест(а).')
+            raise ValidationError(f'Вы должны соблюдать дистанцию в {dist} мест(а).')
 
         return self.cleaned_data
 

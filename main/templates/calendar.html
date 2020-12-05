@@ -4,7 +4,9 @@
 {% endblock %}
 {% block body %}
     {% for booking in bookings %}
-        <h2>{{ booking.start_time }} - {{ booking.end_time }} by {{ booking.user }}</h2>
+        <h2>Row: {{ booking.row }}, Column: {{ booking.column }} {{ booking.start_time }} - {{ booking.end_time }} by {{ booking.user }}</h2>
     {% endfor %}
+    <a href="{% url 'booking-create' object.id %}">Make Booking</a>
+
 
 {% endblock %}
