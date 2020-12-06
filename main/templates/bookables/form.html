@@ -1,9 +1,20 @@
 {% extends 'base.html' %}
 {% block body %}
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="hidden" name="user" value="{{ user.id }}">
-        <input type="submit" value="Save">
-    </form>
+<div class="container">
+    <div class="row row-content">
+        <div class="col-12">
+            <h3>Register Bookable</h3>
+        </div>
+        <div class="col-12 col-md-9">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="form-group row">
+                    <input type="hidden" name="user" value="{{ user.id }}">
+                </div>
+                <input type="submit" value="Save">
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

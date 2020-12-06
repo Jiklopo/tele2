@@ -1,8 +1,8 @@
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, DetailView, CreateView, UpdateView, DeleteView
 
@@ -35,46 +35,73 @@ class UserLogoutView(LoginRequiredMixin, LogoutView):
     next_page = reverse_lazy('index')
 
 
-class UserChangePasswordView(PasswordChangeView):
+class UserChangePasswordView(LoginRequiredMixin, PasswordChangeView):
     template_name = 'auth/password.html'
     success_url = reverse_lazy('index')
 
 
-class CreateBookableView(CreateView):
+class CreateBookableView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     template_name = 'bookables/form.html'
+    permission_required = 'main.add_bookable'
     form_class = BookableForm
     success_url = reverse_lazy('index')
 
 
-class UpdateBookableView(UpdateView):
+class UpdateBookableView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     template_name = 'bookables/form.html'
-    form_class = BookableForm
-    queryset = Bookable.objects.all()
-    success_url = reverse_lazy('index')
-
-
-class DeleteBookableView(DeleteView):
-    template_name = 'bookables/form.html'
+    permission_required = 'main.change_bookable'
     form_class = BookableForm
     queryset = Bookable.objects.all()
     success_url = reverse_lazy('index')
 
 
-class CreateBookingView(CreateView):
+class DeleteBookableView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    template_name = 'bookables/form.html'
+    permission_required = 'main.delete_bookable'
+    form_class = BookableForm
+    queryset = Bookable.objects.all()
+    success_url = reverse_lazy('index')
+
+
+class CalendarView(LoginRequiredMixin, DetailView):
+    template_name = 'calendar.html'
+    queryset = Bookable.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super(CalendarView, self).get_context_data(**kwargs)
+        try:
+            context['bookings'] = Booking.objects.filter(place=self.object)
+        except Booking.DoesNotExist:
+            context['bookings'] = []
+        return context
+
+
+class CreateBookingView(LoginRequiredMixin, CreateView):
     template_name = 'bookings/form.html'
     form_class = BookingForm
     success_url = reverse_lazy('index.html')
 
+    def form_valid(self, form):
+        booking = form.save(commit=False)
+        booking.user = self.request.user
+        #booking.place = get_object_or_404(Bookable, id=self.kwargs['pk'])
+        booking.save()
+        return HttpResponseRedirect(reverse('calendar', args=[booking.place_id]))
 
-class UpdateBookingView(UpdateView):
+
+class UpdateBookingView(LoginRequiredMixin, UpdateView):
     template_name = 'bookings/form.html'
     form_class = BookingForm
-    queryset = Booking.objects.all()
     success_url = reverse_lazy('index.html')
 
+    def get_queryset(self):
+        return Booking.objects.filter(user=self.request.user)
 
-class DeleteBookingView(DeleteView):
+
+class DeleteBookingView(LoginRequiredMixin, DeleteView):
     template_name = 'bookings/form.html'
     form_class = BookingForm
-    queryset = Booking.objects.all()
     success_url = reverse_lazy('index.html')
+
+    def get_queryset(self):
+        return Booking.objects.filter(user=self.request.user)
